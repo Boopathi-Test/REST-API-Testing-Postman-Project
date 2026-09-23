@@ -1,0 +1,885 @@
+{
+  "info": {
+    "_postman_id": "3a480141-93f3-48c7-af00-81f2a8f54617",
+    "name": "REST API Testing Project",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56842388",
+    "_collection_link": "https://go.postman.co/collection/56842388-3a480141-93f3-48c7-af00-81f2a8f54617?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "01 - GET Requests",
+      "item": [
+        {
+          "name": "- Get All Posts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// GET ALL POSTS - POST RESPONSE VALIDATION\r",
+                  "\r",
+                  "console.log(\"Method:\", pm.request.method);\r",
+                  "console.log(\"URL:\", pm.request.url.toString());\r",
+                  "console.log(\"Status:\", pm.response.code);\r",
+                  "\r",
+                  "pm.test(\"Status code should be 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response Content-Type should be JSON\", function () {\r",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+                  "        .to.include(\"application/json\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should contain posts\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.be.an(\"array\");\r",
+                  "    pm.expect(response.length).to.be.above(0);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Post should contain required fields\", function () {\r",
+                  "    const post = pm.response.json()[0];\r",
+                  "\r",
+                  "    pm.expect(post).to.have.property(\"userId\");\r",
+                  "    pm.expect(post).to.have.property(\"id\");\r",
+                  "    pm.expect(post).to.have.property(\"title\");\r",
+                  "    pm.expect(post).to.have.property(\"body\");\r",
+                  "});\r",
+                  "\r",
+                  "console.log(\"Response:\", pm.response.json());"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "- Get Single Post",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// GET SINGLE POST - POST RESPONSE VALIDATION\r",
+                  "\r",
+                  "console.log(\"Method:\", pm.request.method);\r",
+                  "console.log(\"URL:\", pm.request.url.toString());\r",
+                  "console.log(\"Status:\", pm.response.code);\r",
+                  "\r",
+                  "pm.test(\"Status code should be 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response Content-Type should be JSON\", function () {\r",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+                  "        .to.include(\"application/json\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should be an object\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.be.an(\"object\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Post ID should be 1\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response.id).to.eql(1);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Post should contain required fields\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.have.property(\"userId\");\r",
+                  "    pm.expect(response).to.have.property(\"id\");\r",
+                  "    pm.expect(response).to.have.property(\"title\");\r",
+                  "    pm.expect(response).to.have.property(\"body\");\r",
+                  "});\r",
+                  "\r",
+                  "console.log(\"Response:\", pm.response.json());"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "- Invalid Post ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// GET INVALID POST ID - NEGATIVE TEST\r",
+                  "\r",
+                  "console.log(\"Method:\", pm.request.method);\r",
+                  "console.log(\"URL:\", pm.request.url.toString());\r",
+                  "console.log(\"Status:\", pm.response.code);\r",
+                  "\r",
+                  "pm.test(\"Status code should be 404\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response Content-Type should be JSON\", function () {\r",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+                  "        .to.include(\"application/json\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should be an object\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.be.an(\"object\");\r",
+                  "});\r",
+                  "\r",
+                  "console.log(\"Response:\", pm.response.json());"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts/99999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "99999"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02 - POST Requests",
+      "item": [
+        {
+          "name": "- Create Post",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// CREATE POST - POST RESPONSE VALIDATION\r",
+                  "\r",
+                  "console.log(\"Method:\", pm.request.method);\r",
+                  "console.log(\"URL:\", pm.request.url.toString());\r",
+                  "console.log(\"Status:\", pm.response.code);\r",
+                  "\r",
+                  "pm.test(\"Status code should be 201\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response Content-Type should be JSON\", function () {\r",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+                  "        .to.include(\"application/json\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should be an object\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.be.an(\"object\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should contain generated ID\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.have.property(\"id\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Title should match request\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response.title).to.eql(\"QA API Test\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"User ID should match request\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response.userId).to.eql(1);\r",
+                  "});\r",
+                  "\r",
+                  "console.log(\"Response:\", pm.response.json());"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"QA API Test\",\r\n  \"body\": \"Testing POST request using Postman\",\r\n  \"userId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "- Missing Required Fields",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// CREATE POST - MISSING FIELDS VALIDATION\r",
+                  "\r",
+                  "console.log(\"Method:\", pm.request.method);\r",
+                  "console.log(\"URL:\", pm.request.url.toString());\r",
+                  "console.log(\"Status:\", pm.response.code);\r",
+                  "\r",
+                  "pm.test(\"Response should be JSON\", function () {\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should be an object\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.be.an(\"object\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should contain ID\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.have.property(\"id\");\r",
+                  "});\r",
+                  "\r",
+                  "console.log(\"Response:\", pm.response.json());"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"QA API Test\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "- Invalid Data Type",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// CREATE POST - INVALID DATA TYPE VALIDATION\r",
+                  "\r",
+                  "console.log(\"Method:\", pm.request.method);\r",
+                  "console.log(\"URL:\", pm.request.url.toString());\r",
+                  "console.log(\"Status:\", pm.response.code);\r",
+                  "\r",
+                  "pm.test(\"Response should be JSON\", function () {\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should be an object\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.be.an(\"object\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should contain ID\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.have.property(\"id\");\r",
+                  "});\r",
+                  "\r",
+                  "console.log(\"Response:\", pm.response.json());"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": 12345,\r\n  \"body\": true,\r\n  \"userId\": \"invalid\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03 - PUT Requests",
+      "item": [
+        {
+          "name": "- Update Post",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// UPDATE POST - POST RESPONSE VALIDATION\r",
+                  "\r",
+                  "console.log(\"Method:\", pm.request.method);\r",
+                  "console.log(\"URL:\", pm.request.url.toString());\r",
+                  "console.log(\"Status:\", pm.response.code);\r",
+                  "\r",
+                  "pm.test(\"Status code should be 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response Content-Type should be JSON\", function () {\r",
+                  "    pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
+                  "        .to.include(\"application/json\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should be an object\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.be.an(\"object\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Post ID should be 1\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response.id).to.eql(1);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Title should be updated\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response.title).to.eql(\"Updated QA API Test\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Body should be updated\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response.body).to.eql(\"Updated post using PUT request\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"User ID should be 1\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response.userId).to.eql(1);\r",
+                  "});\r",
+                  "\r",
+                  "console.log(\"Response:\", pm.response.json());"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": 1,\r\n  \"title\": \"Updated QA API Test\",\r\n  \"body\": \"Updated post using PUT request\",\r\n  \"userId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "- Update Post Invalid ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// UPDATE POST - INVALID ID VALIDATION\r",
+                  "\r",
+                  "console.log(\"Method:\", pm.request.method);\r",
+                  "console.log(\"URL:\", pm.request.url.toString());\r",
+                  "console.log(\"Status:\", pm.response.code);\r",
+                  "\r",
+                  "pm.test(\"Invalid Post ID should not return success\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 404, 500]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Server should return an error status\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.above(399);\r",
+                  "});\r",
+                  "\r",
+                  "console.log(\"Expected: 4xx client error or handled API error\");\r",
+                  "console.log(\"Actual Status:\", pm.response.code);\r",
+                  "console.log(\"Response Body:\", pm.response.text());"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": 99999,\r\n  \"title\": \"Invalid Post Update\",\r\n  \"body\": \"Testing update with invalid post ID\",\r\n  \"userId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts/99999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "99999"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04 - DELETE Requests",
+      "item": [
+        {
+          "name": "- Delete Post",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// DELETE POST - POST RESPONSE VALIDATION\r",
+                  "\r",
+                  "console.log(\"Method:\", pm.request.method);\r",
+                  "console.log(\"URL:\", pm.request.url.toString());\r",
+                  "console.log(\"Status:\", pm.response.code);\r",
+                  "\r",
+                  "pm.test(\"Status code should be 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should be JSON\", function () {\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should be an object\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.be.an(\"object\");\r",
+                  "});\r",
+                  "\r",
+                  "console.log(\"Response:\", pm.response.json());"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "- Invalid Post ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// DELETE INVALID POST ID - NEGATIVE TEST\r",
+                  "\r",
+                  "console.log(\"Method:\", pm.request.method);\r",
+                  "console.log(\"URL:\", pm.request.url.toString());\r",
+                  "console.log(\"Status:\", pm.response.code);\r",
+                  "\r",
+                  "pm.test(\"Response should be JSON\", function () {\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should be an object\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.be.an(\"object\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"API should return a valid HTTP response\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.within(200, 599);\r",
+                  "});\r",
+                  "\r",
+                  "console.log(\"Invalid Post ID: 99999\");\r",
+                  "console.log(\"Actual Status:\", pm.response.code);\r",
+                  "console.log(\"Response:\", pm.response.json());"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts/99999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "99999"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "05 - Negative Tests",
+      "item": [
+        {
+          "name": "- Invalid Endpoint",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// GET INVALID ENDPOINT - NEGATIVE TEST\r",
+                  "\r",
+                  "console.log(\"Method:\", pm.request.method);\r",
+                  "console.log(\"URL:\", pm.request.url.toString());\r",
+                  "console.log(\"Status:\", pm.response.code);\r",
+                  "\r",
+                  "pm.test(\"Status code should be 404\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should be JSON\", function () {\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should be an object\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.be.an(\"object\");\r",
+                  "});\r",
+                  "\r",
+                  "console.log(\"Response:\", pm.response.json());"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/invalid-endpoint",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "invalid-endpoint"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "- Invalid Post ID Format",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// GET INVALID POST ID - NEGATIVE TEST\r",
+                  "\r",
+                  "console.log(\"Method:\", pm.request.method);\r",
+                  "console.log(\"URL:\", pm.request.url.toString());\r",
+                  "console.log(\"Status:\", pm.response.code);\r",
+                  "\r",
+                  "pm.test(\"Status code should be 404\", function () {\r",
+                  "    pm.response.to.have.status(404);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should be JSON\", function () {\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should be an object\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.be.an(\"object\");\r",
+                  "});\r",
+                  "\r",
+                  "console.log(\"Response:\", pm.response.json());"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/posts/99999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts",
+                "99999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "- Empty Request Body",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// POST EMPTY REQUEST BODY - NEGATIVE TEST\r",
+                  "\r",
+                  "console.log(\"Method:\", pm.request.method);\r",
+                  "console.log(\"URL:\", pm.request.url.toString());\r",
+                  "console.log(\"Status:\", pm.response.code);\r",
+                  "\r",
+                  "pm.test(\"Status code should be 201\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should be JSON\", function () {\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should contain ID\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response).to.have.property(\"id\");\r",
+                  "});\r",
+                  "\r",
+                  "console.log(\"Response:\", pm.response.json());"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "- Null Values",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// POST NULL VALUES - NEGATIVE TEST\r",
+                  "\r",
+                  "console.log(\"Method:\", pm.request.method);\r",
+                  "console.log(\"URL:\", pm.request.url.toString());\r",
+                  "console.log(\"Status:\", pm.response.code);\r",
+                  "\r",
+                  "pm.test(\"Status code should be 201\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should be JSON\", function () {\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should contain null values\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "\r",
+                  "    pm.expect(response.title).to.eql(null);\r",
+                  "    pm.expect(response.body).to.eql(null);\r",
+                  "    pm.expect(response.userId).to.eql(null);\r",
+                  "});\r",
+                  "\r",
+                  "console.log(\"Response:\", pm.response.json());"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": null,\r\n  \"body\": null,\r\n  \"userId\": null\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/posts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
